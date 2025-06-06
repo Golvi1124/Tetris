@@ -8,7 +8,7 @@ namespace Tetris;
 
 public class IBlock : Block // IBlock class inherits from Block class
 {
-    private readonly Position[][] tiles => new Position[][] // first store tile positions for 4 positions of the IBlock in a 2D array
+    private Position[][] tiles => new Position[][] // first store tile positions for 4 positions of the IBlock in a 2D array
     {
         new Position[] { new(1,0), new(1,1), new(1,2), new(1,3) }, // State 0: Horizontal line
         new Position[] { new(0,2), new(1,2), new(2,2), new(3,2) }, // State 1: Vertical line

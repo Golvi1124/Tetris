@@ -17,6 +17,16 @@ public class GameState
         {
             currentBlock = value; // set the current block
             currentBlock.Reset(); // reset the block to its initial position and rotation state
+
+            for (int i = 0; i < 2; i++)
+            {
+                currentBlock.Move(1, 0);
+
+                if (!BlockFits())
+                {
+                    currentBlock.Move(-1, 0);
+                }
+            }
         }
     }
 
@@ -24,11 +34,17 @@ public class GameState
     public BlockQueue BlockQueue { get; } // the queue of blocks to be played
     public bool GameOver { get; private set; } // flag to indicate if the game is over
 
+    public int Score { get; private set; } // property to hold the score of the game
+
+    public Block HeldBlock { get; private set; } // property to hold the held block, if any
+    public bool CanHold { get; private set; } // flag to indicate if the player can hold a block
+
     public GameState()
     {
         GameGrid = new GameGrid(22, 10); // initialize GameGrid with borders
         BlockQueue = new BlockQueue(); // initialize block queue
         CurrentBlock = BlockQueue.GetAndUpdate();
+        CanHold = true; 
     }
 
     private bool BlockFits() //checks if current block is in legal position
@@ -41,6 +57,25 @@ public class GameState
             }
         }
         return true;
+    }
+
+    public void HoldBlock()
+    {
+        if (!CanHold) return; // if holding is not allowed, do nothing
+
+        if (HeldBlock == null) // if no block is held, hold the current block
+        {
+            HeldBlock = CurrentBlock;
+            CurrentBlock = BlockQueue.GetAndUpdate(); // get the next block from the queue
+        }
+        else // if a block is already held, swap it with the current block
+        {
+            Block tmp = CurrentBlock;
+            CurrentBlock = HeldBlock; // set the current block to the held block
+            HeldBlock = tmp; // set the held block to the previous current block
+        }
+
+        CanHold = false; // set holding to false, so the player cannot hold another block until the next move
     }
 
     // Methods to rotate blocks and only if it is possible
@@ -96,7 +131,7 @@ public class GameState
             GameGrid[p.Row, p.Column] = CurrentBlock.Id; // set the grid cell to the block's ID
         }
 
-        GameGrid.ClearFullRows(); // clear any full rows in the grid
+        Score += GameGrid.ClearFullRows(); // clear any full rows in the grid + update the score
 
         if (IsGameOver())
         {
@@ -105,6 +140,7 @@ public class GameState
         else
         {
             CurrentBlock = BlockQueue.GetAndUpdate(); // get the next block from the queue
+            CanHold = true; // allow holding a block again
         }
     }
     public void MoveBlockDown() // moves the current block down
@@ -116,5 +152,35 @@ public class GameState
             CurrentBlock.Move(-1, 0); // revert move if it doesn't fit
             PlaceBlock(); // place the block on the grid
         }
+    }
+
+    private int TileDropDistance(Position p)
+    {
+        int drop = 0;
+
+        while (GameGrid.IsEmpty(p.Row + drop + 1, p.Column))
+        {
+            drop++;
+        }
+
+        return drop; // returns the distance the tile can drop
+    }
+
+    public int BlockDropDistance()
+    {
+        int drop = GameGrid.Rows; // start with the maximum possible drop distance
+
+        foreach (Position p in CurrentBlock.TilePositions())
+        {
+            drop = System.Math.Min(drop, TileDropDistance(p)); // find the minimum drop distance for all tiles
+        }
+
+        return drop; // returns the minimum drop distance for the entire block
+    }
+
+    public void DropBlock() // drops the current block to the bottom
+    {
+        CurrentBlock.Move(BlockDropDistance(), 0); // move the block down by the calculated drop distance
+        PlaceBlock(); // place the block on the grid after dropping it
     }
 }

@@ -32,7 +32,7 @@
             <Canvas x:Name="GameCanvas"
                 Background="#101010"
                 Width="250"
-                Height="500"
+                Height="510"
                 ClipToBounds="True"
                 Loaded="GameCanvas_Loaded"/>
         </Viewbox>
@@ -71,8 +71,10 @@
               Grid.RowSpan="2"
               Grid.ColumnSpan="3"
               Visibility="Hidden">
+
             <StackPanel HorizontalAlignment="Center"
                         VerticalAlignment="Center">
+
                 <TextBlock Text="Game Over"
                            FontSize="48"
                            HorizontalAlignment="Center"/>
@@ -87,8 +89,6 @@
                         Padding="5"
                         Click="PlayAgain_Click"/>
             </StackPanel>
-
         </Grid>
-
     </Grid>
 </Window>
