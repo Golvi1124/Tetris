@@ -17,6 +17,8 @@ public class BlockQueue
         new SBlock(),
         new TBlock(),
         new ZBlock(),
+        new IIBlock(),
+        new OOBlock()
     };
 
     private readonly Random random = new Random();
