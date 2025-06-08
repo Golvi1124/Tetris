@@ -23,18 +23,18 @@
         </Grid.ColumnDefinitions>
 
         <Grid.Background>
-            <ImageBrush ImageSource="/Assets/Background.png"/>
+            <ImageBrush ImageSource="Assets/Background.png"/>
         </Grid.Background>
 
         <Viewbox Grid.Row="1"
                  Grid.Column="1"
                  Margin="0,0,0,20">
             <Canvas x:Name="GameCanvas"
-                Background="#101010"
-                Width="250"
-                Height="510"
-                ClipToBounds="True"
-                Loaded="GameCanvas_Loaded"/>
+                    Background="#101010"
+                    Width="250"
+                    Height="510"
+                    ClipToBounds="True"
+                    Loaded="GameCanvas_Loaded"/>
         </Viewbox>
 
         <TextBlock x:Name="ScoreText"
@@ -49,7 +49,8 @@
                     VerticalAlignment="Center"
                     HorizontalAlignment="Right">
             <TextBlock Text="Hold"
-                           TextAlignment="Center"/>
+                       TextAlignment="Center"/>
+
             <Image x:Name="HoldImage"
                    Margin="20"
                    Width="125"/>
@@ -60,7 +61,8 @@
                     VerticalAlignment="Center"
                     HorizontalAlignment="Left">
             <TextBlock Text="Next"
-                           TextAlignment="Center"/>
+                       TextAlignment="Center"/>
+
             <Image x:Name="NextImage"
                    Margin="20"
                    Width="125"/>
@@ -71,18 +73,17 @@
               Grid.RowSpan="2"
               Grid.ColumnSpan="3"
               Visibility="Hidden">
-
             <StackPanel HorizontalAlignment="Center"
                         VerticalAlignment="Center">
-
                 <TextBlock Text="Game Over"
                            FontSize="48"
-                           HorizontalAlignment="Center"/>
+                           TextAlignment="Center"/>
 
                 <TextBlock x:Name="FinalScoreText"
                            Text="Score: "
                            FontSize="36"
                            TextAlignment="Center"/>
+
                 <Button Content="Play Again"
                         Background="LightGreen"
                         Margin="0,20,0,0"

@@ -30,15 +30,16 @@ public partial class MainWindow : Window
 
     private readonly ImageSource[] blockImages = new ImageSource[]
     {
-        new BitmapImage(new Uri("Assets/Block-Empty.png", UriKind.Relative)), 
-        new BitmapImage(new Uri("Assets/BlockI.png", UriKind.Relative)),
-        new BitmapImage(new Uri("Assets/BlockJ.png", UriKind.Relative)),
-        new BitmapImage(new Uri("Assets/BlockL.png", UriKind.Relative)),
-        new BitmapImage(new Uri("Assets/BlockO.png", UriKind.Relative)),
-        new BitmapImage(new Uri("Assets/BlockS.png", UriKind.Relative)),
-        new BitmapImage(new Uri("Assets/BlockT.png", UriKind.Relative)),
-        new BitmapImage(new Uri("Assets/BlockZ.png", UriKind.Relative))
+    new BitmapImage(new Uri("Assets/Block-Empty.png", UriKind.Relative)),
+    new BitmapImage(new Uri("Assets/Block-I.png", UriKind.Relative)),
+    new BitmapImage(new Uri("Assets/Block-J.png", UriKind.Relative)),
+    new BitmapImage(new Uri("Assets/Block-L.png", UriKind.Relative)),
+    new BitmapImage(new Uri("Assets/Block-O.png", UriKind.Relative)),
+    new BitmapImage(new Uri("Assets/Block-S.png", UriKind.Relative)),
+    new BitmapImage(new Uri("Assets/Block-T.png", UriKind.Relative)),
+    new BitmapImage(new Uri("Assets/Block-Z.png", UriKind.Relative))
     };
+
 
     private readonly Image[,] imageControls;
     private readonly int maxDelay = 1000; 
@@ -70,7 +71,7 @@ public partial class MainWindow : Window
 
                 Canvas.SetTop(imageControl, (r - 2) * cellSize +10); // push 2 invisible cells up, so they are not visible
                 Canvas.SetLeft(imageControl, c * cellSize);
-                GameCanvas.Children.Add(imageControl);
+                GameCanvas.Children.Add(imageControl); // add the image control to the canvas
                 imageControls[r, c] = imageControl; // store the image control in the array
             }
         }
@@ -113,7 +114,7 @@ public partial class MainWindow : Window
         }
         else
         {
-            HoldImage.Source = blockImages[heldBlock.Id]; // empty block image
+            HoldImage.Source = blockImages[heldBlock.Id]; 
         }
     }
 
