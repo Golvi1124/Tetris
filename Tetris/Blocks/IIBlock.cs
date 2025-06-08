@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tetris.Models;
 
-namespace Tetris;
+namespace Tetris.Blocks;
 public class IIBlock : Block
 {
     private readonly Position[][] tiles = new Position[][]

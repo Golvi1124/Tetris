@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tetris.Models;
 
-namespace Tetris;
+namespace Tetris.Core;
 
 public class GameState
 {
@@ -172,7 +173,7 @@ public class GameState
 
         foreach (Position p in CurrentBlock.TilePositions())
         {
-            drop = System.Math.Min(drop, TileDropDistance(p)); // find the minimum drop distance for all tiles
+            drop = Math.Min(drop, TileDropDistance(p)); // find the minimum drop distance for all tiles
         }
 
         return drop; // returns the minimum drop distance for the entire block
