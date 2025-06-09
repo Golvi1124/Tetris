@@ -7,9 +7,9 @@ It was built as a school assignment to explore game loops, UI rendering, and obj
 
 ## Download
 
-➡️ [Download Tetris Game (.zip)](https://github.com/Golvi1124/Tetris/releases/download/v1.0/Tetris.zip)
+[Download Tetris Game (.zip)](https://github.com/Golvi1124/Tetris/releases/download/v1.0/publishTetris.zip)
 
-> 📌 Unzip the file and double-click `Tetris.exe` to run the game (Windows only)
+>  Unzip the file and double-click `Tetris.exe` to run the game (Windows only)
 
 ---
 
