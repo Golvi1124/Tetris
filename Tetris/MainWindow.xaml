@@ -44,6 +44,13 @@
                    Margin="0, 10"
                    TextAlignment="Center"/>
 
+        <TextBlock x:Name="TimeText"
+                   Grid.Row="0"
+                   Grid.Column="2"
+                   Text="Time: "
+                   Margin="0, 10"
+                   TextAlignment="Center"/>
+
         <StackPanel Grid.Row="1"
                     Grid.Column="0"
                     VerticalAlignment="Center"
@@ -84,11 +91,57 @@
                            FontSize="36"
                            TextAlignment="Center"/>
 
+                <TextBlock x:Name="FinalTimeText"
+           Text="Time: "
+           FontSize="24"
+           TextAlignment="Center"
+           HorizontalAlignment="Center"/>
+
                 <Button Content="Play Again"
                         Background="LightGreen"
                         Margin="0,20,0,0"
                         Padding="5"
                         Click="PlayAgain_Click"/>
+            </StackPanel>
+        </Grid>
+
+        <Grid x:Name="PausedMenu"
+              Background="Black"
+              Grid.RowSpan="2"
+              Grid.ColumnSpan="3"
+              Visibility="Hidden">
+            <StackPanel HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Margin="20">
+                <TextBlock Text="Game is paused."
+                           FontSize="48"
+                           TextAlignment="Center"
+                           HorizontalAlignment="Center"/>
+
+                <Button Content="Resume Game (P)"
+                        FontSize="24"
+                        Background="MediumPurple"
+                        Margin="10"
+                        Padding="10"
+                        Click="ResumeGame_Click"
+                        HorizontalAlignment="Center"/>
+
+                <Button Content="Start New Game"
+                        FontSize="24"
+                        Background="LightGreen"
+                        Padding="10"
+                        Margin="10"
+                        Click="PlayAgain_Click"
+                        HorizontalAlignment="Center"/>
+
+                <Button Content="Exit Game"
+        FontSize="20"
+                        Background="Red"
+        Padding="8"
+        Margin="0,10,0,0"
+        Click="ExitGame_Click"
+        HorizontalAlignment="Center"/>
+
             </StackPanel>
         </Grid>
     </Grid>

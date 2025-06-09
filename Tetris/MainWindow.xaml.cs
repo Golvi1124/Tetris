@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Diagnostics;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -8,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using Tetris.Core;
 using Tetris.Models;
 
@@ -48,15 +50,33 @@ public partial class MainWindow : Window
 
 
     private readonly Image[,] imageControls;
-    private readonly int maxDelay = 1000; 
+    private readonly int maxDelay = 1000;
     private readonly int minDelay = 75;
     private readonly int delayDecrese = 25; // decrease delay by 25 milliseconds each time
+
+    private bool isPaused = false;
+    private Stopwatch gameTimer = new Stopwatch();
+    private DispatcherTimer uiTimer;
+
+    private CancellationTokenSource? gameLoopCts;
+
 
     private GameState gameState = new GameState();
 
     public MainWindow()
     {
         InitializeComponent();
+
+        gameTimer.Start();
+
+        uiTimer = new DispatcherTimer();
+        uiTimer.Interval = TimeSpan.FromMilliseconds(50); // update UI every 50ms
+        uiTimer.Tick += (s, e) =>
+        {
+            TimeText.Text = $"Time: {gameTimer.Elapsed:mm\\:ss}";
+        };
+        uiTimer.Start();
+
         imageControls = SetupGameCanvas(gameState.GameGrid);
     }
 
@@ -75,7 +95,7 @@ public partial class MainWindow : Window
                     Height = cellSize
                 };
 
-                Canvas.SetTop(imageControl, (r - 2) * cellSize +10); // push 2 invisible cells up, so they are not visible
+                Canvas.SetTop(imageControl, (r - 2) * cellSize + 10); // push 2 invisible cells up, so they are not visible
                 Canvas.SetLeft(imageControl, c * cellSize);
                 GameCanvas.Children.Add(imageControl); // add the image control to the canvas
                 imageControls[r, c] = imageControl; // store the image control in the array
@@ -116,11 +136,11 @@ public partial class MainWindow : Window
     {
         if (heldBlock == null)
         {
-            HoldImage.Source = blockImages[0]; 
+            HoldImage.Source = blockImages[0];
         }
         else
         {
-            HoldImage.Source = blockImages[heldBlock.Id]; 
+            HoldImage.Source = blockImages[heldBlock.Id];
         }
     }
 
@@ -145,20 +165,31 @@ public partial class MainWindow : Window
         ScoreText.Text = $"Score: {gameState.Score}"; // update the score text
     }
 
-    private async Task GameLoop()
+    private async Task GameLoop(CancellationToken token)
     {
-        Draw(gameState); // initial draw of the game state
-    
+        Draw(gameState);// initial draw of the game state
+
         while (!gameState.GameOver)
         {
-            int delay = Math.Max(minDelay, maxDelay - (gameState.Score * delayDecrese)); // calculate the delay based on the score
-            await Task.Delay(delay); // wait for 500 milliseconds before the next move
-            gameState.MoveBlockDown(); // move the block down
-            Draw(gameState); // redraw the game state after the move 
+            while (isPaused) // pause loop without exiting game loop
+            {
+                await Task.Delay(10); // lightweight wait
+                if (token.IsCancellationRequested) return; // check for cancellation
+            }
+
+            int delay = Math.Max(minDelay, maxDelay - (gameState.Score * delayDecrese));// calculate the delay based on the score
+            await Task.Delay(delay);
+
+            if (token.IsCancellationRequested) return;
+
+            gameState.MoveBlockDown();
+            Draw(gameState);
         }
 
-        GameOverMenu.Visibility = Visibility.Visible; // show the game over menu
-        FinalScoreText.Text = $"Your score: {gameState.Score}"; // display the final score
+        gameTimer.Stop();
+        FinalScoreText.Text = $"Your score: {gameState.Score}";
+        FinalTimeText.Text = $"Your time: {gameTimer.Elapsed:mm\\:ss}";
+        GameOverMenu.Visibility = Visibility.Visible;
     }
 
     private void Window_KeyDown(object sender, KeyEventArgs e)
@@ -184,25 +215,72 @@ public partial class MainWindow : Window
                 gameState.RotateBlockCCW();
                 break;
             case Key.C:
-                gameState.HoldBlock(); 
+                gameState.HoldBlock();
                 break;
             case Key.Space:
-                gameState.DropBlock(); 
+                gameState.DropBlock();
+                break;
+            case Key.P:
+                TogglePause();
                 break;
             default:
                 return; // ignore other keys
         }
-        Draw(gameState); // redraw the game state after the move
+        if (!isPaused)
+        {
+            Draw(gameState); // only draw if not paused
+        } // redraw the game state after the move
     }
     private async void GameCanvas_Loaded(object sender, RoutedEventArgs e)
     {
-        await GameLoop(); // start the game loop when the canvas is loaded
+        gameLoopCts = new CancellationTokenSource(); // create a new cancellation token source for the game loop
+        await GameLoop(gameLoopCts.Token);
     }
 
     private async void PlayAgain_Click(object sender, RoutedEventArgs e)
     {
-        gameState = new GameState(); // reset the game state
-        GameOverMenu.Visibility = Visibility.Hidden; // hide the game over menu
-        await GameLoop(); // start a new game loop
+        // Cancel the previous loop (if any)
+        gameLoopCts?.Cancel();
+
+        gameState = new GameState();// reset the game state
+        isPaused = false;
+        PausedMenu.Visibility = Visibility.Hidden;// hide the menus
+        GameOverMenu.Visibility = Visibility.Hidden;
+
+        gameTimer.Reset();
+        gameTimer.Start();
+        uiTimer.Start();
+
+        // Start a fresh cancellation token
+        gameLoopCts = new CancellationTokenSource();
+        await GameLoop(gameLoopCts.Token);
+    }
+
+    private void TogglePause()
+    {
+        isPaused = !isPaused;
+
+        if (isPaused)
+        {
+            gameTimer.Stop();
+            uiTimer.Stop();
+            PausedMenu.Visibility = Visibility.Visible;
+        }
+        else
+        {
+            gameTimer.Start();
+            uiTimer.Start();
+            PausedMenu.Visibility = Visibility.Hidden;
+        }
+    }
+
+    private void ResumeGame_Click(object sender, RoutedEventArgs e)
+    {
+        TogglePause();
+    }
+
+    private void ExitGame_Click(object sender, RoutedEventArgs e)
+    {
+        Application.Current.Shutdown(); // exit the application
     }
 }
