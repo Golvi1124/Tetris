@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tetris.Models;
+﻿using Tetris.Models;
 
 namespace Tetris.Core;
 
@@ -45,7 +40,7 @@ public class GameState
         GameGrid = new GameGrid(22, 10); // initialize GameGrid with borders
         BlockQueue = new BlockQueue(); // initialize block queue
         CurrentBlock = BlockQueue.GetAndUpdate();
-        CanHold = true; 
+        CanHold = true;
     }
 
     private bool BlockFits() //checks if current block is in legal position

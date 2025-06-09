@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Tetris.Core;
+﻿namespace Tetris.Core;
 
 public class GameGrid // this class will hold 2 dimensiaonal array for the game grid
 {

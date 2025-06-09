@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tetris.Models;
+﻿using Tetris.Models;
 
 namespace Tetris.Blocks;
 public class OOBlock : Block
@@ -17,4 +12,3 @@ public class OOBlock : Block
     protected override Position StartOffset => new Position(0, 4); // Drop in center column
     protected override Position[][] Tiles => tiles;
 }
-

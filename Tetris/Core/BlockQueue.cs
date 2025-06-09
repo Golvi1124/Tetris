@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tetris.Blocks;
+﻿using Tetris.Blocks;
 
 namespace Tetris.Core;
 
 public class BlockQueue
 {
-    private readonly Block[] blocks = new Block[] 
+    private readonly Block[] blocks = new Block[]
     {
         new IBlock(),
         new JBlock(),
@@ -24,16 +19,16 @@ public class BlockQueue
 
     private readonly Random random = new Random();
 
-    public Block NextBlock {  get; private set; } // property for the next block in the queue. later will show to player
+    public Block NextBlock { get; private set; } // property for the next block in the queue. later will show to player
 
     public BlockQueue()
     {
         NextBlock = RandomBlock();
     }
 
-    private Block RandomBlock() 
+    private Block RandomBlock()
     {
-        return blocks[random.Next(blocks.Length)]; 
+        return blocks[random.Next(blocks.Length)];
     }
 
     public Block GetAndUpdate() // returns next block and updates the property

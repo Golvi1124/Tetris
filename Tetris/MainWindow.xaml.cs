@@ -1,14 +1,9 @@
 ﻿using System.Diagnostics;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using Tetris.Core;
 using Tetris.Models;
@@ -48,7 +43,6 @@ public partial class MainWindow : Window
     new BitmapImage(new Uri("Assets/Block-oo.png", UriKind.Relative)),
     };
 
-
     private readonly Image[,] imageControls;
     private readonly int maxDelay = 1000;
     private readonly int minDelay = 75;
@@ -59,7 +53,6 @@ public partial class MainWindow : Window
     private DispatcherTimer uiTimer;
 
     private CancellationTokenSource? gameLoopCts;
-
 
     private GameState gameState = new GameState();
 

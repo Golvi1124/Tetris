@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tetris.Models;
+﻿using Tetris.Models;
 
 namespace Tetris;
 
@@ -24,7 +19,7 @@ public abstract class Block // abstract class defines a base "blueprint" for oth
     public IEnumerable<Position> TilePositions() // get the positions of the tiles in the current rotation state
     {
         foreach (Position p in Tiles[rotationState])
-                {
+        {
             yield return new Position(p.Row + offset.Row, p.Column + offset.Column); //yield return azily produces each tile’s absolute position, avoids full list upfront
         }
     }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tetris.Models;
+﻿using Tetris.Models;
 
 namespace Tetris.Blocks;
 
@@ -18,6 +13,6 @@ internal class SBlock : Block
     };
 
     public override int Id => 5;
-    protected override Position StartOffset => new Position(0, 3); 
-    protected override Position[][] Tiles => tiles; 
+    protected override Position StartOffset => new Position(0, 3);
+    protected override Position[][] Tiles => tiles;
 }
